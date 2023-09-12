@@ -142,14 +142,14 @@ async def ensure_openai_token():
 async def setup_clients():
 
     # Replace these with your own values, either in environment variables or directly here
-    AZURE_STORAGE_ACCOUNT = os.getenv("AZURE_STORAGE_ACCOUNT")
-    AZURE_STORAGE_CONTAINER = os.getenv("AZURE_STORAGE_CONTAINER")
-    AZURE_SEARCH_SERVICE = os.getenv("AZURE_SEARCH_SERVICE")
-    AZURE_SEARCH_INDEX = os.getenv("AZURE_SEARCH_INDEX")
-    AZURE_OPENAI_SERVICE = os.getenv("AZURE_OPENAI_SERVICE")
-    AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.getenv("AZURE_OPENAI_CHATGPT_DEPLOYMENT")
-    AZURE_OPENAI_CHATGPT_MODEL = os.getenv("AZURE_OPENAI_CHATGPT_MODEL")
-    AZURE_OPENAI_EMB_DEPLOYMENT = os.getenv("AZURE_OPENAI_EMB_DEPLOYMENT")
+    AZURE_STORAGE_ACCOUNT = os.environ["AZURE_STORAGE_ACCOUNT"]
+    AZURE_STORAGE_CONTAINER = os.environ["AZURE_STORAGE_CONTAINER"]
+    AZURE_SEARCH_SERVICE = os.environ["AZURE_SEARCH_SERVICE"]
+    AZURE_SEARCH_INDEX = os.environ["AZURE_SEARCH_INDEX"]
+    AZURE_OPENAI_SERVICE = os.environ["AZURE_OPENAI_SERVICE"]
+    AZURE_OPENAI_CHATGPT_DEPLOYMENT = os.environ["AZURE_OPENAI_CHATGPT_DEPLOYMENT"]
+    AZURE_OPENAI_CHATGPT_MODEL = os.environ["AZURE_OPENAI_CHATGPT_MODEL"]
+    AZURE_OPENAI_EMB_DEPLOYMENT = os.environ["AZURE_OPENAI_EMB_DEPLOYMENT"]
 
     KB_FIELDS_CONTENT = os.getenv("KB_FIELDS_CONTENT", "content")
     KB_FIELDS_SOURCEPAGE = os.getenv("KB_FIELDS_SOURCEPAGE", "sourcepage")
@@ -228,5 +228,6 @@ def create_app():
     app = Quart(__name__)
     app.register_blueprint(bp)
     app.asgi_app = OpenTelemetryMiddleware(app.asgi_app)
-
+    # Level should be one of https://docs.python.org/3/library/logging.html#logging-levels
+    logging.basicConfig(level=os.getenv("APP_LOG_LEVEL", "ERROR"))
     return app
